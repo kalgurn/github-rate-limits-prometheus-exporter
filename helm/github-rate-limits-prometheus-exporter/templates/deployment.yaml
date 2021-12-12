@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "github-app-limits-prometheus-exporter.fullname" . }}
+  labels:
+    {{- include "github-app-limits-prometheus-exporter.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "github-app-limits-prometheus-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "github-app-limits-prometheus-exporter.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "github-app-limits-prometheus-exporter.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- if eq .Values.github.authType "app" }}
+            - name: GITHUB_AUTH_TYPE
+              value: {{ .Values.github.authType | upper | quote }}
+            - name: GITHUB_APP_ID
+              value: {{ .Values.github.appID | quote}}
+            - name: GITHUB_INSTALLATION_ID
+              value: {{ .Values.github.installationID | quote}}
+            - name: GITHUB_PRIVATE_KEY_PATH
+              value: "{{ .Values.github.privateKeyPath }}key.pem"
+            - name: GITHUB_APP_NAME
+              value: {{ .Values.github.appName | quote }}
+          volumeMounts:
+          - name: key-volume
+            readOnly: true
+            mountPath: {{ .Values.github.privateKeyPath | quote }}
+          {{- else if eq .Values.github.authType "pat" }}
+            - name: GITHUB_AUTH_TYPE
+              value: {{ .Values.github.authType | upper | quote }}
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.github.secretName }}
+                  key: token
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /limits
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /limits
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- if eq .Values.github.authType "app" }}
+      volumes:
+        - name: key-volume
+          secret:
+            secretName: {{ .Values.github.secretName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
