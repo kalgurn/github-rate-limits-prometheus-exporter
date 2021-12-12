@@ -1,0 +1,121 @@
+name: Pull Request
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+      
+  set-version:
+    name: Calculate semver
+    runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.tag.outputs.new_tag }}
+      tag: ${{ steps.tag.outputs.tag}}
+      part: ${{ steps.tag.outputs.part}}
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
+        id: tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DRY_RUN: true
+          DEFAULT_BUMP: patch
+          PRERELEASE_SUFFIX: "pr-${{ github.event.pull_request.number }}"
+
+  build: 
+    name: Build
+    runs-on: ubuntu-latest
+    needs:
+      - set-version
+    strategy:
+      matrix:
+        goos: 
+          - linux
+          - darwin
+        goarch: 
+          - amd64
+          - arm64
+        go-version: '1.17'
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
+      
+      # Install all the dependencies
+      - name: Install dependencies
+        run: |
+          go version
+          go get -u golang.org/x/lint/golint
+          
+      # Run build of the application
+      - name: Run build
+        run: ./build.sh ${{ needs.set-version.outputs.new_tag }}
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
+
+      - name: Store intermediate artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gal-exporter-${{ matrix.goos }}-${{ matrix.goarch }}-${{ needs.set-version.outputs.new_tag }}.zip
+          path: gal-exporter-${{ matrix.goos }}-${{ matrix.goarch }}.zip
+        
+      
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.0' # The Go version to download (if necessary) and use.
+
+      - name: Run Unit tests
+        run: go test ./... --coverprofile=coverage.out -test.v
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: ./coverage.out
+
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    needs:
+      - test
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage
+          path: ./
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
