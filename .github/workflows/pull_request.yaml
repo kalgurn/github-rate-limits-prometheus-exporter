@@ -5,33 +5,9 @@ on:
       - master
 jobs:
       
-  set-version:
-    name: Calculate semver
-    runs-on: ubuntu-latest
-    outputs:
-      new_tag: ${{ steps.tag.outputs.new_tag }}
-      tag: ${{ steps.tag.outputs.tag}}
-      part: ${{ steps.tag.outputs.part}}
-    steps:
-
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.36.0
-        id: tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-          DRY_RUN: true
-          DEFAULT_BUMP: patch
-          PRERELEASE_SUFFIX: "pr-${{ github.event.pull_request.number }}"
-
   build: 
     name: Build
     runs-on: ubuntu-latest
-    needs:
-      - set-version
     strategy:
       matrix:
         goos: 
@@ -61,7 +37,7 @@ jobs:
           
       # Run build of the application
       - name: Run build
-        run: ./build.sh ${{ needs.set-version.outputs.new_tag }}
+        run: ./build.sh ${{ github.sha }}
         env:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
@@ -70,9 +46,8 @@ jobs:
       - name: Store intermediate artifact
         uses: actions/upload-artifact@v2
         with:
-          name: grl-exporter-${{ matrix.goos }}-${{ matrix.goarch }}-${{ needs.set-version.outputs.new_tag }}.zip
+          name: grl-exporter-${{ matrix.goos }}-${{ matrix.goarch }}-${{ github.sha }}.zip
           path: grl-exporter-${{ matrix.goos }}-${{ matrix.goarch }}.zip
-        
       
   test:
     name: Test
