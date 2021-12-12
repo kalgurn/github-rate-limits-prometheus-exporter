@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "github-app-limits-prometheus-exporter.fullname" . }}
+  labels:
+    {{- include "github-app-limits-prometheus-exporter.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "github-app-limits-prometheus-exporter.selectorLabels" . | nindent 4 }}
