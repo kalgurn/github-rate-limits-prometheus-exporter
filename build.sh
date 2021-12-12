@@ -10,4 +10,4 @@ DATE=$(date -u)
 
 CGO_ENABLED=0 GO111MODULE=auto go build -o ${BINARY_NAME} ${MAIN_PACKAGE}
 
-zip ${BINARY_NAME}.zip ${BINARY_NAME} > /dev/null
+zip ${BINARY_NAME}-${GOOS}-${GOARCH}.zip ${BINARY_NAME} > /dev/null
