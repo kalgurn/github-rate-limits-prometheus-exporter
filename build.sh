@@ -1,9 +1,9 @@
 #!/bin/bash
 
-PACKAGE_NAME="gal-exporter"
+PACKAGE_NAME="prometheus_exporter"
 MAIN_PACKAGE="cmd/${PACKAGE_NAME}/main.go"
 
-BINARY_NAME="${PACKAGE_NAME}"
+BINARY_NAME="grl-exporter"
 
 GITHASH=$(git rev-parse --short HEAD)
 DATE=$(date -u)

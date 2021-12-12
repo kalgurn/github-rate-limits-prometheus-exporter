@@ -70,8 +70,8 @@ jobs:
       - name: Store intermediate artifact
         uses: actions/upload-artifact@v2
         with:
-          name: gal-exporter-${{ matrix.goos }}-${{ matrix.goarch }}-${{ needs.set-version.outputs.new_tag }}.zip
-          path: gal-exporter-${{ matrix.goos }}-${{ matrix.goarch }}.zip
+          name: grl-exporter-${{ matrix.goos }}-${{ matrix.goarch }}-${{ needs.set-version.outputs.new_tag }}.zip
+          path: grl-exporter-${{ matrix.goos }}-${{ matrix.goarch }}.zip
         
       
   test:

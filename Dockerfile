@@ -10,17 +10,17 @@ COPY cmd ./cmd
 COPY internal ./internal
 RUN go mod download
 
-RUN CGO_ENABLED=0 GO111MODULE=auto go build -o /gal-exporter cmd/prometheus_exporter/main.go
+RUN CGO_ENABLED=0 GO111MODULE=auto go build -o /grl-exporter cmd/prometheus_exporter/main.go
 RUN ls -la
 
 FROM gcr.io/distroless/base-debian10
 
 WORKDIR /
 
-COPY --from=build /gal-exporter /gal-exporter
+COPY --from=build /grl-exporter /grl-exporter
 
 EXPOSE 2112
 
 USER nonroot:nonroot
 
-ENTRYPOINT ["/gal-exporter"]
+ENTRYPOINT ["/grl-exporter"]
