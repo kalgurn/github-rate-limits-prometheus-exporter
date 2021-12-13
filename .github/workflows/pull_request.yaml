@@ -74,9 +74,4 @@ jobs:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
 
       - name: Run Unit tests
-        run: go test ./... --coverprofile=coverage.out -test.v
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: coverage
-          path: ./coverage.out
+        run: go test ./... -test.v
