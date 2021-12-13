@@ -1,6 +1,6 @@
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kalgurn_github-rate-limit-prometheus-exporter&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kalgurn_github-rate-limit-prometheus-exporter)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=kalgurn_github-rate-limit-prometheus-exporter&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=kalgurn_github-rate-limit-prometheus-exporter)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kalgurn_github-rate-limit-prometheus-exporter&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kalgurn_github-rate-limit-prometheus-exporter)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=kalgurn_github-rate-limits-prometheus-exporter&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=kalgurn_github-rate-limits-prometheus-exporter)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=kalgurn_github-rate-limits-prometheus-exporter&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=kalgurn_github-rate-limits-prometheus-exporter)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=kalgurn_github-rate-limits-prometheus-exporter&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=kalgurn_github-rate-limits-prometheus-exporter)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/github-rate-limit-prometheus-exporter)](https://artifacthub.io/packages/search?repo=github-rate-limit-prometheus-exporter)
 # Github Rate Limit Prometheus Exporter
 
