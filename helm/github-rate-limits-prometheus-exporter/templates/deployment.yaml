@@ -44,7 +44,7 @@ spec:
             - name: GITHUB_PRIVATE_KEY_PATH
               value: "{{ .Values.github.privateKeyPath }}key.pem"
             - name: GITHUB_APP_NAME
-              value: {{ .Values.github.appName | quote }}
+              value: {{ include "github-app-limits-prometheus-exporter.fullname" . }}
           volumeMounts:
           - name: key-volume
             readOnly: true
@@ -64,11 +64,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /limits
+              path: /metrics
               port: http
           readinessProbe:
             httpGet:
-              path: /limits
+              path: /metrics
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

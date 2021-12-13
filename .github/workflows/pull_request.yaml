@@ -3,6 +3,10 @@ on:
   pull_request:
     branches:
       - master
+
+env:
+  IMAGE_NAME: grl-exporter
+
 jobs:
       
   build: 
@@ -46,8 +50,8 @@ jobs:
       - name: Store intermediate artifact
         uses: actions/upload-artifact@v2
         with:
-          name: grl-exporter-${{ matrix.goos }}-${{ matrix.goarch }}-${{ github.sha }}.zip
-          path: grl-exporter-${{ matrix.goos }}-${{ matrix.goarch }}.zip
+          name: ${{ env.IMAGE_NAME}}-${{ matrix.goos }}-${{ matrix.goarch }}-${{ github.sha }}.zip
+          path: ${{ env.IMAGE_NAME}}-${{ matrix.goos }}-${{ matrix.goarch }}.zip
       
   test:
     name: Test
