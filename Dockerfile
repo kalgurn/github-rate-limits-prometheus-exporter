@@ -13,7 +13,7 @@ RUN go mod download
 RUN CGO_ENABLED=0 GO111MODULE=auto go build -o /grl-exporter cmd/prometheus_exporter/main.go
 RUN ls -la
 
-FROM gcr.io/distroless/base-debian10
+FROM gcr.io/distroless/base-debian11
 
 WORKDIR /
 
