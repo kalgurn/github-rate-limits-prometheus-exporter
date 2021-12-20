@@ -20,13 +20,13 @@ type FakeCollector struct {
 
 func newFakeCollector() *LimitsCollector {
 	return &LimitsCollector{
-		LimitTotal: prometheus.NewDesc(prometheus.BuildFQName(github_app, "", "limit_total"),
+		LimitTotal: prometheus.NewDesc(prometheus.BuildFQName(githubAccount, "", "limit_total"),
 			"Total limit of requests for the installation",
 			nil, nil),
-		LimitRemaining: prometheus.NewDesc(prometheus.BuildFQName(github_app, "", "limit_remaining"),
+		LimitRemaining: prometheus.NewDesc(prometheus.BuildFQName(githubAccount, "", "limit_remaining"),
 			"Amount of remaining requests for the installation",
 			nil, nil),
-		LimitUsed: prometheus.NewDesc(prometheus.BuildFQName(github_app, "", "limit_used"),
+		LimitUsed: prometheus.NewDesc(prometheus.BuildFQName(githubAccount, "", "limit_used"),
 			"Amount of used requests for the installation",
 			nil, nil),
 	}
@@ -40,7 +40,7 @@ func (collector *FakeCollector) Describe(ch chan<- *prometheus.Desc) {
 
 func (collector *FakeCollector) Collect(ch chan<- prometheus.Metric) {
 
-	log.Printf("Collecting metrics for %s", github_app)
+	log.Printf("Collecting metrics for %s", githubAccount)
 	//Write latest value for each metric in the prometheus metric channel.
 	//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
 	m1 := prometheus.MustNewConstMetric(collector.LimitTotal, prometheus.GaugeValue, float64(10))
