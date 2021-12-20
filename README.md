@@ -23,7 +23,7 @@ PAT
 ```sh
 docker run -d \
     -e GITHUB_AUTH_TYPE=PAT \
-    -e GITHUB_APP_NAME=name_of_my_app
+    -e GITHUB_ACCOUNT_NAME=name_of_my_app
     -e GITHUB_TOKEN=my_token \
     -p 2112:2112 \
     ghcr.io/kalgurn/grl-exporter:latest
@@ -35,7 +35,7 @@ docker run -d \
     -e GITHUB_AUTH_TYPE=APP \
     -e GITHUB_APP_ID=my_app_id \
     -e GITHUB_INSTALLATION_ID=my_app_installation_id \
-    -e GITHUB_APP_NAME=name_of_my_app
+    -e GITHUB_ACCOUNT_NAME=name_of_my_app
     -e GITHUB_PRIVATE_KEY_PATH=/tmp
     -v $PWD/path_to/key.pem:/tmp/key.pem
     -p 2112:2112 \

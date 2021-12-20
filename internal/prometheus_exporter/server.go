@@ -12,20 +12,26 @@ import (
 )
 
 var (
-	github_app = utils.GetOSVar("GITHUB_APP_NAME")
+	githubAccount = utils.GetOSVar("GITHUB_ACCOUNT_NAME")
 )
 
 func newLimitsCollector() *LimitsCollector {
 	return &LimitsCollector{
-		LimitTotal: prometheus.NewDesc(prometheus.BuildFQName(github_app, "", "limit_total"),
+		LimitTotal: prometheus.NewDesc(prometheus.BuildFQName("github", "limit", "total"),
 			"Total limit of requests for the installation",
-			nil, nil),
-		LimitRemaining: prometheus.NewDesc(prometheus.BuildFQName(github_app, "", "limit_remaining"),
+			nil, prometheus.Labels{
+				"account": githubAccount,
+			}),
+		LimitRemaining: prometheus.NewDesc(prometheus.BuildFQName("github", "limit", "remaining"),
 			"Amount of remaining requests for the installation",
-			nil, nil),
-		LimitUsed: prometheus.NewDesc(prometheus.BuildFQName(github_app, "", "limit_used"),
+			nil, prometheus.Labels{
+				"account": githubAccount,
+			}),
+		LimitUsed: prometheus.NewDesc(prometheus.BuildFQName("github", "limit", "used"),
 			"Amount of used requests for the installation",
-			nil, nil),
+			nil, prometheus.Labels{
+				"account": githubAccount,
+			}),
 	}
 }
 
@@ -39,7 +45,7 @@ func (collector *LimitsCollector) Collect(ch chan<- prometheus.Metric) {
 
 	auth := github_client.InitConfig()
 	limits := github_client.GetRemainingLimits(auth.InitClient())
-	log.Printf("Collected metrics for %s", github_app)
+	log.Printf("Collected metrics for %s", githubAccount)
 	log.Printf("Limit: %d | Used: %d | Remaining: %d", limits.Limit, limits.Used, limits.Remaining)
 	//Write latest value for each metric in the prometheus metric channel.
 	//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
@@ -56,6 +62,7 @@ func (collector *LimitsCollector) Collect(ch chan<- prometheus.Metric) {
 
 func Run() {
 	limit := newLimitsCollector()
+	prometheus.NewRegistry()
 	prometheus.MustRegister(limit)
 
 	http.Handle("/metrics", promhttp.Handler())
