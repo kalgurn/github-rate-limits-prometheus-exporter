@@ -43,13 +43,15 @@ spec:
               value: {{ .Values.github.installationID | quote}}
             - name: GITHUB_PRIVATE_KEY_PATH
               value: "{{ .Values.github.privateKeyPath }}key.pem"
-            - name: GITHUB_APP_NAME
-              value: {{ include "github-app-limits-prometheus-exporter.fullname" . }}
+            - name: GITHUB_ACCOUNT_NAME
+              value: {{ .Release.Name }}
           volumeMounts:
           - name: key-volume
             readOnly: true
             mountPath: {{ .Values.github.privateKeyPath | quote }}
           {{- else if eq .Values.github.authType "pat" }}
+            - name: GITHUB_ACCOUNT_NAME
+              value: {{ .Release.Name }}
             - name: GITHUB_AUTH_TYPE
               value: {{ .Values.github.authType | upper | quote }}
             - name: GITHUB_TOKEN
