@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/bradleyfalzon/ghinstallation/v2 v2.0.4
 	github.com/google/go-github v17.0.0+incompatible
-	github.com/migueleliasweb/go-github-mock v0.0.5
+	github.com/migueleliasweb/go-github-mock v0.0.6
 	github.com/prometheus/client_golang v1.11.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
@@ -17,7 +17,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-github/v37 v37.0.0 // indirect
 	github.com/google/go-github/v41 v41.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
