@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/bradleyfalzon/ghinstallation/v2 v2.0.4
 	github.com/google/go-github v17.0.0+incompatible
-	github.com/migueleliasweb/go-github-mock v0.0.7
+	github.com/migueleliasweb/go-github-mock v0.0.8
 	github.com/prometheus/client_golang v1.12.1
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
