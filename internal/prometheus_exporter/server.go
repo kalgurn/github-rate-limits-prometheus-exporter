@@ -1,6 +1,7 @@
 package prometheus_exporter
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -60,11 +61,18 @@ func (collector *LimitsCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- m3
 }
 
+// healthCheckHandler returns a positive 200 OK response to any GET request, indicating
+// that the server is alive and serving requests.
+func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "healthy")
+}
+
 func Run() {
 	limit := newLimitsCollector()
 	prometheus.NewRegistry()
 	prometheus.MustRegister(limit)
 
 	http.Handle("/metrics", promhttp.Handler())
+	http.HandleFunc("/health_check", healthCheckHandler)
 	http.ListenAndServe(":2112", nil)
 }
