@@ -32,6 +32,11 @@ func newLimitsCollector() *LimitsCollector {
 			nil, prometheus.Labels{
 				"account": githubAccount,
 			}),
+		SecondsLeft: prometheus.NewDesc(prometheus.BuildFQName("github", "limit", "time_left_seconds"),
+			"Time left in seconds until rate limit gets reset for the installation",
+			nil, prometheus.Labels{
+				"account": githubAccount,
+			}),
 	}
 }
 
@@ -39,6 +44,7 @@ func (collector *LimitsCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.LimitTotal
 	ch <- collector.LimitRemaining
 	ch <- collector.LimitUsed
+	ch <- collector.SecondsLeft
 }
 
 func (collector *LimitsCollector) Collect(ch chan<- prometheus.Metric) {
@@ -52,12 +58,15 @@ func (collector *LimitsCollector) Collect(ch chan<- prometheus.Metric) {
 	m1 := prometheus.MustNewConstMetric(collector.LimitTotal, prometheus.GaugeValue, float64(limits.Limit))
 	m2 := prometheus.MustNewConstMetric(collector.LimitRemaining, prometheus.GaugeValue, float64(limits.Remaining))
 	m3 := prometheus.MustNewConstMetric(collector.LimitUsed, prometheus.GaugeValue, float64(limits.Used))
+	m4 := prometheus.MustNewConstMetric(collector.SecondsLeft, prometheus.GaugeValue, limits.SecondsLeft)
 	m1 = prometheus.NewMetricWithTimestamp(time.Now(), m1)
 	m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
 	m3 = prometheus.NewMetricWithTimestamp(time.Now(), m3)
+	m4 = prometheus.NewMetricWithTimestamp(time.Now(), m4)
 	ch <- m1
 	ch <- m2
 	ch <- m3
+	ch <- m4
 }
 
 func Run() {

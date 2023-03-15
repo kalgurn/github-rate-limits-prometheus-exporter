@@ -13,9 +13,10 @@ type TokenConfig struct {
 }
 
 type RateLimits struct {
-	Limit     int
-	Remaining int
-	Used      int
+	Limit       int
+	Remaining   int
+	Used        int
+	SecondsLeft float64
 }
 
 type GithubClient interface {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/bradleyfalzon/ghinstallation/v2"
 	"github.com/google/go-github/github"
@@ -21,9 +22,10 @@ func GetRemainingLimits(c *github.Client) RateLimits {
 	}
 
 	return RateLimits{
-		Limit:     limits.Core.Limit,
-		Remaining: limits.Core.Remaining,
-		Used:      limits.Core.Limit - limits.Core.Remaining,
+		Limit:       limits.Core.Limit,
+		Remaining:   limits.Core.Remaining,
+		Used:        limits.Core.Limit - limits.Core.Remaining,
+		SecondsLeft: time.Until(limits.Core.Reset.Time).Seconds(),
 	}
 }
 
