@@ -6,4 +6,5 @@ type LimitsCollector struct {
 	LimitTotal     *prometheus.Desc
 	LimitRemaining *prometheus.Desc
 	LimitUsed      *prometheus.Desc
+	SecondsLeft    *prometheus.Desc
 }
