@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
 
@@ -103,7 +103,7 @@ jobs:
           output-file: 'false'
 
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
       
