@@ -16,6 +16,7 @@ type FakeCollector struct {
 	LimitTotal     *prometheus.Desc
 	LimitRemaining *prometheus.Desc
 	LimitUsed      *prometheus.Desc
+	SecondsLeft    *prometheus.Desc
 }
 
 func newFakeCollector() *LimitsCollector {
@@ -29,6 +30,9 @@ func newFakeCollector() *LimitsCollector {
 		LimitUsed: prometheus.NewDesc(prometheus.BuildFQName(githubAccount, "", "limit_used"),
 			"Amount of used requests for the installation",
 			nil, nil),
+		SecondsLeft: prometheus.NewDesc(prometheus.BuildFQName(githubAccount, "", "seconds_left"),
+			"Time left in seconds until limit is reset for the installation",
+			nil, nil),
 	}
 }
 
@@ -36,6 +40,7 @@ func (collector *FakeCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.LimitTotal
 	ch <- collector.LimitRemaining
 	ch <- collector.LimitUsed
+	ch <- collector.SecondsLeft
 }
 
 func (collector *FakeCollector) Collect(ch chan<- prometheus.Metric) {
@@ -46,12 +51,15 @@ func (collector *FakeCollector) Collect(ch chan<- prometheus.Metric) {
 	m1 := prometheus.MustNewConstMetric(collector.LimitTotal, prometheus.GaugeValue, float64(10))
 	m2 := prometheus.MustNewConstMetric(collector.LimitRemaining, prometheus.GaugeValue, float64(6))
 	m3 := prometheus.MustNewConstMetric(collector.LimitUsed, prometheus.GaugeValue, float64(4))
+	m4 := prometheus.MustNewConstMetric(collector.SecondsLeft, prometheus.GaugeValue, time.Duration(time.Second*30).Seconds())
 	m1 = prometheus.NewMetricWithTimestamp(time.Now().Add(-time.Hour), m1)
 	m2 = prometheus.NewMetricWithTimestamp(time.Now(), m2)
 	m3 = prometheus.NewMetricWithTimestamp(time.Now(), m3)
+	m4 = prometheus.NewMetricWithTimestamp(time.Now(), m4)
 	ch <- m1
 	ch <- m2
 	ch <- m3
+	ch <- m4
 }
 
 func TestNewLimitsCollector(t *testing.T) {
