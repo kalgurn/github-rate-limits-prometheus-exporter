@@ -74,14 +74,14 @@ func (collector *LimitsCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func Run() {
-	limit := newLimitsCollector()
-	prometheus.NewRegistry()
-	prometheus.MustRegister(limit)
-
 	// Default to logging metric collection
 	if logMetricCollectionParseErr != nil {
 		logMetricCollection = true
 	}
+
+	limit := newLimitsCollector()
+	prometheus.NewRegistry()
+	prometheus.MustRegister(limit)
 
 	http.Handle("/metrics", promhttp.Handler())
 	http.ListenAndServe(":2112", nil)
