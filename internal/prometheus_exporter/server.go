@@ -3,6 +3,7 @@ package prometheus_exporter
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/kalgurn/github-rate-limits-prometheus-exporter/internal/github_client"
@@ -12,7 +13,8 @@ import (
 )
 
 var (
-	githubAccount = utils.GetOSVar("GITHUB_ACCOUNT_NAME")
+	githubAccount                                    = utils.GetOSVar("GITHUB_ACCOUNT_NAME")
+	logMetricCollection, logMetricCollectionParseErr = strconv.ParseBool(utils.GetOSVar("GITHUB_LOG_METRIC_COLLECTION"))
 )
 
 func newLimitsCollector() *LimitsCollector {
@@ -51,8 +53,10 @@ func (collector *LimitsCollector) Collect(ch chan<- prometheus.Metric) {
 
 	auth := github_client.InitConfig()
 	limits := github_client.GetRemainingLimits(auth.InitClient())
-	log.Printf("Collected metrics for %s", githubAccount)
-	log.Printf("Limit: %d | Used: %d | Remaining: %d", limits.Limit, limits.Used, limits.Remaining)
+	if logMetricCollection {
+		log.Printf("Collected metrics for %s", githubAccount)
+		log.Printf("Limit: %d | Used: %d | Remaining: %d", limits.Limit, limits.Used, limits.Remaining)
+	}
 	//Write latest value for each metric in the prometheus metric channel.
 	//Note that you can pass CounterValue, GaugeValue, or UntypedValue types here.
 	m1 := prometheus.MustNewConstMetric(collector.LimitTotal, prometheus.GaugeValue, float64(limits.Limit))
@@ -70,6 +74,11 @@ func (collector *LimitsCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func Run() {
+	// Default to logging metric collection
+	if logMetricCollectionParseErr != nil {
+		logMetricCollection = true
+	}
+
 	limit := newLimitsCollector()
 	prometheus.NewRegistry()
 	prometheus.MustRegister(limit)

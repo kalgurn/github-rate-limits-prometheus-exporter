@@ -17,6 +17,9 @@ github:
 
 replicaCount: 1
 
+logging:
+  logMetricCollection: true
+
 image:
   repository: ghcr.io/kalgurn/grl-exporter
   pullPolicy: IfNotPresent

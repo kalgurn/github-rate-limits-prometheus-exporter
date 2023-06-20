@@ -10,6 +10,8 @@ Helm Chart with values and deployment can be found [here](./helm/github-rate-lim
 
 For the exporter to run you need to supply either a GitHub Token or a set of a GitHub App credentials, alongside with a type of authentication to use(pat/app)
 
+You can use the environment variable `GITHUB_LOG_METRIC_COLLECTION` (boolean) to control if rate limit metrics are also logged to the console when they're collected by Prometheus. As the functionality is backed by [Golang `strconv.ParseBool`](https://pkg.go.dev/strconv#ParseBool), it accepts 1, t, T, TRUE, true, True, 0, f, F, FALSE, false, False. Any other value or lack thereof will default to enabling logs.
+
 ### The metrics can then be represented on a [grafana](https://grafana.com) dashboard
 
 
