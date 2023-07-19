@@ -35,7 +35,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: GITHUB_LOG_METRIC_COLLECTION
-              value: {{ .Values.logging.logMetricCollection | default "true" }}
+              value: {{ .Values.logging.logMetricCollection | quote }}
           {{- if eq .Values.github.authType "app" }}
             - name: GITHUB_AUTH_TYPE
               value: {{ .Values.github.authType | upper | quote }}
