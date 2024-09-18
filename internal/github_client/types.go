@@ -1,10 +1,14 @@
 package github_client
 
-import "github.com/google/go-github/github"
+import (
+	"github.com/google/go-github/v65/github"
+)
 
 type AppConfig struct {
 	AppID          int64
 	InstallationID int64
+	OrgName        string
+	RepoName       string
 	PrivateKeyPath string
 }
 
