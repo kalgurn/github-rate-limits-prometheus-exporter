@@ -108,6 +108,10 @@ func initAppClient(c *AppConfig, httpClient *http.Client) *github.Client {
 		c.InstallationID = installation.GetID()
 	}
 
+	if httpClient == nil {
+		httpClient = &http.Client{}
+	}
+
 	if httpClient == http.DefaultClient {
 		tr := http.DefaultTransport
 		itr, err := ghinstallation.NewKeyFromFile(tr, c.AppID, c.InstallationID, c.PrivateKeyPath)
