@@ -135,6 +135,7 @@ func TestInitConfigAppWithoutInstallationID(t *testing.T) {
 	testAuth := &AppConfig{
 		AppID:          1,
 		OrgName:        "org",
+		InstallationID: 0,
 		PrivateKeyPath: "/home",
 	}
 
