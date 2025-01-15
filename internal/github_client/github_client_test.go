@@ -90,6 +90,7 @@ func TestInitConfigApp(t *testing.T) {
 	os.Setenv("GITHUB_APP_ID", "1")
 	os.Setenv("GITHUB_INSTALLATION_ID", "1")
 	os.Setenv("GITHUB_PRIVATE_KEY_PATH", "/home")
+	defer os.Unsetenv("GITHUB_INSTALLATION_ID")
 
 	testAuth := &AppConfig{
 		AppID:          1,
@@ -135,7 +136,6 @@ func TestInitConfigAppWithoutInstallationID(t *testing.T) {
 	testAuth := &AppConfig{
 		AppID:          1,
 		OrgName:        "org",
-		InstallationID: 0,
 		PrivateKeyPath: "/home",
 	}
 
