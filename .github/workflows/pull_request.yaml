@@ -48,7 +48,7 @@ jobs:
           CGO_ENABLED: 0
 
       - name: Store intermediate artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.IMAGE_NAME}}-${{ matrix.goos }}-${{ matrix.goarch }}-${{ github.sha }}.zip
           path: ${{ env.IMAGE_NAME}}-${{ matrix.goos }}-${{ matrix.goarch }}.zip
