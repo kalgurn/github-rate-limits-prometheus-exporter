@@ -1,11 +1,10 @@
 module github.com/kalgurn/github-rate-limits-prometheus-exporter
 
 go 1.21
-
-toolchain go1.21.3
+toolchain go1.22.5
 
 require (
-	github.com/bradleyfalzon/ghinstallation/v2 v2.2.0
+	github.com/bradleyfalzon/ghinstallation/v2 v2.14.0
 	github.com/google/go-github/v65 v65.0.0
 	github.com/migueleliasweb/go-github-mock v0.0.16
 	github.com/prometheus/client_golang v1.14.0
@@ -19,9 +18,10 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-github/v50 v50.1.0 // indirect
+	github.com/google/go-github/v69 v69.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
