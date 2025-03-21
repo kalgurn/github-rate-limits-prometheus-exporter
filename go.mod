@@ -13,7 +13,7 @@ require (
 	golang.org/x/oauth2 v0.6.0
 )
 
-require github.com/golang-jwt/jwt/v5 v5.2.1
+require github.com/golang-jwt/jwt/v5 v5.2.2
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
