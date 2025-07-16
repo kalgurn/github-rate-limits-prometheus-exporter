@@ -18,17 +18,19 @@ jobs:
     strategy:
       matrix:
         go-version: 
-            - '1.22'
+            - '1.24'
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
+          go-version-file: go.mod
+          cache: false
 
       - name: Run Unit tests
         run: go test ./... -test.v
@@ -43,10 +45,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v3.4.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -54,12 +56,12 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v4.3.0
+        uses: docker/metadata-action@v5.7.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v6.13.0
         with:
           context: .
           push: true
@@ -84,10 +86,10 @@ jobs:
           - amd64
           - arm64
         go-version: 
-            - '1.22'
+            - '1.24'
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       
@@ -103,9 +105,11 @@ jobs:
           output-file: 'false'
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
+          go-version-file: go.mod
+          cache: false
       
       # Install all the dependencies
       - name: Install dependencies
@@ -134,13 +138,13 @@ jobs:
       - build
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Download artifacts
         id: download
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
   
       - name: Display structure of downloaded files
         id: files

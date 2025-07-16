@@ -21,17 +21,19 @@ jobs:
           - amd64
           - arm64
         go-version: 
-          - '1.22'
+          - '1.24'
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
+          go-version-file: go.mod
+          cache: false
       
       # Install all the dependencies
       - name: Install dependencies
@@ -59,19 +61,21 @@ jobs:
     strategy:
       matrix:
         go-version: 
-            - '1.22'
+            - '1.24'
     needs:
       - build
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
+          go-version-file: go.mod
+          cache: false
 
       - name: Run Unit tests
         run: go test ./... -test.v
