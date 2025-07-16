@@ -17,7 +17,7 @@ func init() {
 
 func RespError(err error) error {
 	if err != nil {
-		errMsg := fmt.Sprintf("there was an error during the call execution: %s", err)
+		errMsg := fmt.Sprintf("there was an error during the call execution: %s\n", err)
 
 		if verbose {
 			log.SetOutput(os.Stderr)
