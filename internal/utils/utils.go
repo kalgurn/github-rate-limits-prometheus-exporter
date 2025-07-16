@@ -4,11 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"log"
 )
 
 func RespError(err error) error {
+	log.SetOutput(os.Stderr)
 	if err != nil {
 		errMsg := fmt.Sprintf("there was an error during the call execution: %s\n", err)
+		log.Printf("ERRO %s", errMsg)
 		return errors.New(errMsg)
 	}
 	return nil
