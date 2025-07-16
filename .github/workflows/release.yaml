@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         go-version: 
-            - '1.22'
+            - '1.24'
     steps:
 
       - uses: actions/checkout@v4
@@ -29,6 +29,8 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
+          go-version-file: go.mod
+          cache: false
 
       - name: Run Unit tests
         run: go test ./... -test.v
@@ -54,7 +56,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v4.3.0
+        uses: docker/metadata-action@v5.7.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}
 
@@ -84,7 +86,7 @@ jobs:
           - amd64
           - arm64
         go-version: 
-            - '1.22'
+            - '1.24'
     steps:
 
       - uses: actions/checkout@v4
@@ -106,6 +108,8 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }} # The Go version to download (if necessary) and use.
+          go-version-file: go.mod
+          cache: false
       
       # Install all the dependencies
       - name: Install dependencies
@@ -140,7 +144,7 @@ jobs:
 
       - name: Download artifacts
         id: download
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
   
       - name: Display structure of downloaded files
         id: files
