@@ -9,7 +9,7 @@ require (
 	github.com/google/go-github/v65 v65.0.0
 	github.com/migueleliasweb/go-github-mock v1.4.0
 	github.com/prometheus/client_golang v1.22.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	golang.org/x/oauth2 v0.30.0
 )
 
