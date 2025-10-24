@@ -20,7 +20,9 @@ func GetRemainingLimits(c *github.Client) (RateLimits, error) {
         return RateLimits{}, utils.RespError(fmt.Errorf("github client is nil"))
     }
 
-    ctx := context.Background()
+    // Set a timeout of 5 seconds for the request
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
 
     limits, _, err := c.RateLimit.Get(ctx)
     if err != nil {
