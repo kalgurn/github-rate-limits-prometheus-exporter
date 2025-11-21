@@ -95,7 +95,7 @@ jobs:
       
       - name: Conventional Changelog Action
         id: changelog
-        uses: TriPSs/conventional-changelog-action@v3
+        uses: TriPSs/conventional-changelog-action@v6
         with:
           github-token: ${{ secrets.github_token }}
           git-message: 'chore(release): {version}'
