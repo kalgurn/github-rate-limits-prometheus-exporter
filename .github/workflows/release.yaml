@@ -91,6 +91,7 @@ jobs:
           version-file: './version.json'
           preset: 'conventionalcommits'
           output-file: 'false'
+          skip-bump: 'true'
 
   build: 
     name: Build
