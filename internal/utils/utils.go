@@ -33,6 +33,7 @@ func GetOSVar(envVar string) string {
 	value, present := os.LookupEnv(envVar)
 	if !present {
 		err := fmt.Sprintf("environment variable %s not set", envVar)
+		// Log the error but do not terminate; caller should validate the value.
 		RespError(errors.New(err))
 		return ""
 	}

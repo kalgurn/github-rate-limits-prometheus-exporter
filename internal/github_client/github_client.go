@@ -15,20 +15,29 @@ import (
 	"golang.org/x/oauth2"
 )
 
-func GetRemainingLimits(c *github.Client) RateLimits {
-	ctx := context.Background()
+func GetRemainingLimits(c *github.Client) (RateLimits, error) {
+    if c == nil {
+        return RateLimits{}, utils.RespError(fmt.Errorf("github client is nil"))
+    }
 
-	limits, _, err := c.RateLimit.Get(ctx)
-	if err != nil {
-		utils.RespError(err)
-	}
+    // Set a timeout of 5 seconds for the request
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
 
-	return RateLimits{
-		Limit:       limits.Core.Limit,
-		Remaining:   limits.Core.Remaining,
-		Used:        limits.Core.Limit - limits.Core.Remaining,
-		SecondsLeft: time.Until(limits.Core.Reset.Time).Seconds(),
-	}
+    limits, _, err := c.RateLimit.Get(ctx)
+    if err != nil {
+        return RateLimits{}, utils.RespError(err)
+    }
+    if limits == nil || limits.Core == nil {
+        return RateLimits{}, utils.RespError(fmt.Errorf("rate limit response is nil"))
+    }
+
+    return RateLimits{
+        Limit:       limits.Core.Limit,
+        Remaining:   limits.Core.Remaining,
+        Used:        limits.Core.Limit - limits.Core.Remaining,
+        SecondsLeft: time.Until(limits.Core.Reset.Time).Seconds(),
+    }, nil
 }
 
 func (c *TokenConfig) InitClient() *github.Client {
@@ -58,11 +67,18 @@ func InitConfig() GithubClient {
 			installationID, _ = strconv.ParseInt(envInstallationID, 10, 64)
 		}
 
+		// Only read organization/repo names if InstallationID is not provided
+		var orgName, repoName string
+		if envInstallationID == "" {
+			orgName = utils.GetOSVar("GITHUB_ORG_NAME")
+			repoName = utils.GetOSVar("GITHUB_REPO_NAME")
+		}
+
 		auth = &AppConfig{
 			AppID:          appID,
 			InstallationID: installationID,
-			OrgName:        utils.GetOSVar("GITHUB_ORG_NAME"),
-			RepoName:       utils.GetOSVar("GITHUB_REPO_NAME"),
+			OrgName:        orgName,
+			RepoName:       repoName,
 			PrivateKeyPath: utils.GetOSVar("GITHUB_PRIVATE_KEY_PATH"),
 		}
 	default:
