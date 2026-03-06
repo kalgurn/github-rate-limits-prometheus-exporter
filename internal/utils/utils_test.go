@@ -24,5 +24,5 @@ func TestGetOSVar(t *testing.T) {
 
 func TestRespError(t *testing.T) {
 	err := errors.New("test")
-	assert.Equal(t, errors.New("there was an error during the call execution: test"), RespError(err))
+	assert.Equal(t, errors.New("there was an error during the call execution: test\n"), RespError(err))
 }
