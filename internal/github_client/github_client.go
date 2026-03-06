@@ -52,12 +52,13 @@ func InitConfig() GithubClient {
 	// determine type (app or pat)
 	var auth GithubClient
 	authType := utils.GetOSVar("GITHUB_AUTH_TYPE")
-	if authType == "PAT" {
+	switch authType {
+	case "PAT":
 		auth = &TokenConfig{
 			Token: utils.GetOSVar("GITHUB_TOKEN"),
 		}
 
-	} else if authType == "APP" {
+	case "APP":
 		appID, _ := strconv.ParseInt(utils.GetOSVar("GITHUB_APP_ID"), 10, 64)
 
 		var installationID int64
@@ -80,7 +81,7 @@ func InitConfig() GithubClient {
 			RepoName:       repoName,
 			PrivateKeyPath: utils.GetOSVar("GITHUB_PRIVATE_KEY_PATH"),
 		}
-	} else {
+	default:
 		err := fmt.Errorf("invalid auth type")
 		utils.RespError(err)
 		return nil
