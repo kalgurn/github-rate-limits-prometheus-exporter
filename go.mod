@@ -5,7 +5,7 @@ go 1.24.4
 toolchain go1.24.5
 
 require (
-	github.com/bradleyfalzon/ghinstallation/v2 v2.16.0
+	github.com/bradleyfalzon/ghinstallation/v2 v2.17.0
 	github.com/google/go-github/v65 v65.0.0
 	github.com/migueleliasweb/go-github-mock v1.4.0
 	github.com/prometheus/client_golang v1.22.0
@@ -20,8 +20,8 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
-	github.com/google/go-github/v72 v72.0.0 // indirect
 	github.com/google/go-github/v73 v73.0.0 // indirect
+	github.com/google/go-github/v75 v75.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
